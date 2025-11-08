@@ -21,9 +21,10 @@ public class ArrayDequeTest {
             System.out.print(arr.get(i) + " ");
         }
 
+        System.out.println();
         for (int i = 0; i < 20; i++) {
-            arr.removeFirst();
-            arr.removeLast();
+            System.out.print(arr.removeFirst() + " ");
+            System.out.print(arr.removeLast() + " ");
         }
 
         System.out.println(arr.size());

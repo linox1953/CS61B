@@ -1,4 +1,9 @@
 public class ArrayDeque<T> {
+    private static final int INIT_CAPACITY = 8;
+    private static final double SHRINK_FACTOR = 0.5;
+    private static final double EXPAND_FACTOR = 2.0;
+    private static final double USAGE_THRESHOLD = 0.5;
+
     private T[] items;
     private int nextFirst;
     private int nextLast;
@@ -18,16 +23,21 @@ public class ArrayDeque<T> {
     }
 
     /** 按照从 first 到 last 的顺序整理数组 */
-    private T[] organized(int arrLength) {
-        T[] a = (T[]) new Object[arrLength];
-        if (nextFirst < nextLast - 1) { // 当 First 小于 Last, 即 nextFirst < nextLast - 1 时
-                                        // 这种情况一般出现在执行removeFirst/Last后
-            System.arraycopy(items, nextFirst + 1, a, 0, nextLast - nextFirst - 1);
+    private T[] organized(int capacity) {
+        T[] newArray = (T[]) new Object[capacity];
+        int start = (nextFirst + 1) % items.length; // start 指数组开始的位置, % 为了处理 nextFirst 在末尾的情况, 此时 start 为 0
+
+        /* start < nextLast 处理的是当数组的开始位置(start)在数组结束位置之前或相等的情况(常见于连续执行多次 remove)
+         * start == nextLast && nextLast == 0 && size == capacity 处理的是数组完全填满且数组开始位置等于 nextLast 等于 0,
+         * 例如当多次执行 addFirst 操作后, 数组已满且 nextFirst 回到起始位置(数组末尾, 此时 start 为 0), 就会出现这种情况 */
+        if (start < nextLast || (start == nextLast && nextLast == 0 && size == items.length)) {
+            System.arraycopy(items, start, newArray, 0, size);
         } else {
-            System.arraycopy(items, nextFirst + 1, a, 0, items.length - nextFirst - 1);
-            System.arraycopy(items, 0, a, items.length - nextFirst - 1, nextLast);
+            int firstSegment = items.length - start; // 第一段的长度
+            System.arraycopy(items, start, newArray, 0, firstSegment);
+            System.arraycopy(items, 0, newArray, firstSegment,size - firstSegment);
         }
-        return a;
+        return newArray;
     }
 
     /** 通过 dFactor 倍率给数组扩容/减容, 用于 add 时数组已满或 remove 时使用率小于0.5,
@@ -45,10 +55,10 @@ public class ArrayDeque<T> {
         return arrSize / length;
     }
 
-    /** 满足一定条件则自动 resize, 这个方法一般放在 add/remove 方法的开头
+    /** 满足一定条件则自动 resize, 这个方法一般放在 add 方法的开头和 remove 方法的末尾
      *  这样使 organized 函数比较简单, 无需过多判定(反复思考) */
     private void checkAutoResize() {
-        if (size + 1 == items.length) {
+        if (size == items.length) {
             resize(2);
         } else if (size >= 16 && getArrayUsage(size, items.length) < 0.5) {
             resize(0.5);
@@ -100,8 +110,6 @@ public class ArrayDeque<T> {
     /** 移除数组的第一个数据, 并返回被移除的数据,
      *  若数组为空则返回 null */
     public T removeFirst() {
-        checkAutoResize();
-
         if (isEmpty()) {
             return null;
         }
@@ -111,15 +119,16 @@ public class ArrayDeque<T> {
         } else {
             nextFirst++;
         }
+        T item = items[nextFirst];
 
         size--;
-        return items[nextFirst];
+        checkAutoResize();
+        return item;
     }
 
     /** 移除数组的最后一个数据, 并返回被移除的数据,
      *  若数组为空则返回 null */
     public T removeLast() {
-        checkAutoResize();
 
         if (isEmpty()) {
             return null;
@@ -130,26 +139,34 @@ public class ArrayDeque<T> {
         } else {
             nextLast--;
         }
+        T item = items[nextLast];
 
         size--;
-        return items[nextLast];
+        checkAutoResize();
+        return item;
+    }
+
+    /** 根据给出的下标返回数组中的实际下标,
+     *  nextFirst + 1 即指数组开始的位置
+     *  (nextFirst + 1 + index) % items.length 相当于索引 0 处的偏移量(即数组实际下标) */
+    private int getActualIndex(int index) {
+        return (nextFirst + 1 + index) % items.length;
     }
 
     /** 根据索引返回数组的数据 */
     public T get(int index) {
-        T[] a = organized(size);
         if (index >= size) {
             return null;
         }
-        return a[index];
+        int actualIndex = getActualIndex(index);
+        return items[actualIndex];
     }
 
     /** 按照格式输出数组  */
     public void printDeque() {
-        T[] a = organized(size);
-
-        for (T item : a) {
-            System.out.print(item + " ");
+        for (int i = 0; i < size; i++) {
+            int actualIndex = getActualIndex(i);
+            System.out.print(items[actualIndex] + " ");
         }
     }
 }
