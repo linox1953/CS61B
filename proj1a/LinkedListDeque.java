@@ -14,7 +14,7 @@ public class LinkedListDeque<T> {
     }
 
     private int size;
-    StuffNode sentinel;
+    private StuffNode sentinel;
 
     /* 创建空链表时,让 sentinel 的 prev 和 next 都指向自身,
      * 利用引用类型的特性来完成这一点 */
