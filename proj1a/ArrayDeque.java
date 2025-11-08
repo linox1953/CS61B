@@ -1,9 +1,4 @@
 public class ArrayDeque<T> {
-    private static final int INIT_CAPACITY = 8;
-    private static final double SHRINK_FACTOR = 0.5;
-    private static final double EXPAND_FACTOR = 2.0;
-    private static final double USAGE_THRESHOLD = 0.5;
-
     private T[] items;
     private int nextFirst;
     private int nextLast;
