@@ -25,7 +25,8 @@ public class ArrayDeque<T> {
     /** 按照从 first 到 last 的顺序整理数组 */
     private T[] organized(int capacity) {
         T[] newArray = (T[]) new Object[capacity];
-        int start = (nextFirst + 1) % items.length; // start 指数组开始的位置, % 为了处理 nextFirst 在末尾的情况, 此时 start 为 0
+        int start = (nextFirst + 1) % items.length; // start 指数组开始的位置,
+                                                    // % 为了处理nextFirst 在末尾的情况, 此时 start 为 0
 
         /* start < nextLast 处理的是当数组的开始位置(start)在数组结束位置之前或相等的情况(常见于连续执行多次 remove)
          * start == nextLast && nextLast == 0 && size == capacity 处理的是数组完全填满且数组开始位置等于 nextLast 等于 0,
@@ -35,7 +36,7 @@ public class ArrayDeque<T> {
         } else {
             int firstSegment = items.length - start; // 第一段的长度
             System.arraycopy(items, start, newArray, 0, firstSegment);
-            System.arraycopy(items, 0, newArray, firstSegment,size - firstSegment);
+            System.arraycopy(items, 0, newArray, firstSegment, size - firstSegment);
         }
         return newArray;
     }
