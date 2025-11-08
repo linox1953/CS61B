@@ -41,8 +41,18 @@ public class ArrayDeque<T> {
     }
 
     /** 返回数组的使用率 */
-    private double getArrayUsage(double size, double length) {
-        return size / length;
+    private double getArrayUsage(double arrSize, double length) {
+        return arrSize / length;
+    }
+
+    /** 满足一定条件则自动 resize, 这个方法一般放在 add/remove 方法的开头
+     *  这样使 organized 函数比较简单, 无需过多判定(反复思考) */
+    private void checkAutoResize() {
+        if (size + 1 == items.length) {
+            resize(2);
+        } else if (size >= 16 && getArrayUsage(size, items.length) < 0.5) {
+            resize(0.5);
+        }
     }
 
     /** 返回数组大小(元素个数) */
@@ -59,9 +69,7 @@ public class ArrayDeque<T> {
 
     /** 向数组的最前端添加数据 */
     public void addFirst(T item) {
-        if (size == items.length) {
-            resize(2);
-        }
+        checkAutoResize();
 
         items[nextFirst] = item;
 
@@ -76,9 +84,7 @@ public class ArrayDeque<T> {
 
     /** 向数组最后端添加数据 */
     public void addLast(T item) {
-        if (size == items.length) {
-            resize(2);
-        }
+        checkAutoResize();
 
         items[nextLast] = item;
 
@@ -94,12 +100,10 @@ public class ArrayDeque<T> {
     /** 移除数组的第一个数据, 并返回被移除的数据,
      *  若数组为空则返回 null */
     public T removeFirst() {
+        checkAutoResize();
+
         if (isEmpty()) {
             return null;
-        }
-
-        if (getArrayUsage(size, items.length) < 0.5 && items.length > 16) {
-            resize(0.5);
         }
 
         if (nextFirst == items.length - 1) {
@@ -114,13 +118,11 @@ public class ArrayDeque<T> {
 
     /** 移除数组的最后一个数据, 并返回被移除的数据,
      *  若数组为空则返回 null */
-    public T removeLast () {
+    public T removeLast() {
+        checkAutoResize();
+
         if (isEmpty()) {
             return null;
-        }
-
-        if (getArrayUsage(size, items.length) < 0.5 && items.length > 16) {
-            resize(0.5);
         }
 
         if (nextLast == 0) {

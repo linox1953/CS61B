@@ -1,12 +1,11 @@
 public class LinkedListDeque<T> {
-
     /* 创建内部类是为了更好的创建和使用 sentinel 节点,
      * sentinel 节点可以大幅简化程序逻辑. 程序员只需关注对 sentinel 的调用和改写,
      * 而不必关注链表的具体数据和实现细节 */
     private class StuffNode {
-        public StuffNode prev;
-        public T item;
-        public StuffNode next;
+        StuffNode prev;
+        T item;
+        StuffNode next;
         public StuffNode(StuffNode p, T t, StuffNode n) {
             prev = p;
             item = t;
@@ -17,18 +16,10 @@ public class LinkedListDeque<T> {
     private int size;
     StuffNode sentinel;
 
-    public LinkedListDeque(T item) {
-        sentinel = new StuffNode(null, null, null); // StuffNode的 item 值不重要
-        StuffNode node = new StuffNode(sentinel, item, sentinel);
-        sentinel.prev = node; // 使 sentinel 的 prev 和 next 都指向 node, 这样就能让 DDList 循环起来
-        sentinel.next = node;
-        size = 1;
-    }
-
     /* 创建空链表时,让 sentinel 的 prev 和 next 都指向自身,
      * 利用引用类型的特性来完成这一点 */
     public LinkedListDeque() {
-        StuffNode sentinel = new StuffNode(null, null, null);
+        sentinel = new StuffNode(null, null, null);
         sentinel.prev = sentinel;
         sentinel.next = sentinel;
         size = 0;
@@ -125,8 +116,7 @@ public class LinkedListDeque<T> {
     }
 
     /** get()方法的递归版本,需要通过 helper 函数辅助完成 */
-    public T getRecursive(int index)
-    {
+    public T getRecursive(int index) {
         return getRecursiveHelper(sentinel.next, index);
     }
 }

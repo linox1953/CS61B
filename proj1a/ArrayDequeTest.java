@@ -12,18 +12,21 @@ public class ArrayDequeTest {
 //        arr.addFirst(4);
 
         Random rand = new Random();
-        for (int i = 0; i < 5000; i++) {
-            arr.addLast(i);
+        for (int i = 0; i < 100; i++) {
             arr.addFirst(i);
         }
 
-        int size = arr.size();
-        System.out.println(size);
 
-        for (int i = 0; i < 2000; i++) {
+        for (int i = 0; i < 100; i++) {
+            System.out.print(arr.get(i) + " ");
+        }
+
+        for (int i = 0; i < 20; i++) {
             arr.removeFirst();
             arr.removeLast();
         }
+
+        System.out.println(arr.size());
         arr.printDeque();
     }
 }
