@@ -1,7 +1,7 @@
 package synthesizer;
 import java.util.Iterator;
 
-public interface BoundedQueue<T> extends Iterable<T>{
+public interface BoundedQueue<T> extends Iterable<T> {
     int capacity();     // 返回队列容量
     int fillCount();    // 返回队列中数据个数
     void enqueue(T x);  // 在队列末尾添加 x

@@ -31,7 +31,7 @@ public class GuitarString {
         //       between -0.5 and 0.5. You can get such a number by using:
         //       double r = Math.random() - 0.5;
         while (!buffer.isEmpty()) {
-             buffer.dequeue();
+            buffer.dequeue();
         }
         while (!buffer.isFull()) {
             buffer.enqueue(Math.random() - 0.5); // 生成 -0.5 到 0.5 之间的随机数
