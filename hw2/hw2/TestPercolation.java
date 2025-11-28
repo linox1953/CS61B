@@ -53,7 +53,7 @@ public class TestPercolation {
         assertEquals(25, pl3.numberOfOpenSites());
         assertTrue(pl3.percolates());
 
-        PercolationStats ps = new PercolationStats(500, 1, new PercolationFactory());
+        PercolationStats ps = new PercolationStats(500, 1000, new PercolationFactory());
         System.out.println(ps.mean());
         System.out.println(ps.stddev());
         System.out.println(ps.confidenceHigh());
