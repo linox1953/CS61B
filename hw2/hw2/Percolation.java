@@ -37,8 +37,7 @@ public class Percolation {
 
     // open the site (row, col) if it is not open already
     public void open(int row, int col) {
-        if (row < 0 || row > gridOpenStats.length - 1 ||
-            col < 0 || col > gridOpenStats.length - 1) {
+        if (row < 0 || row >= gridOpenStats.length || col < 0 || col >= gridOpenStats.length) {
             throw new IndexOutOfBoundsException();
         }
 
@@ -83,8 +82,7 @@ public class Percolation {
 
     // is the site (row, col) open?
     public boolean isOpen(int row, int col) {
-        if (row < 0 || row > gridOpenStats.length - 1 ||
-            col < 0 || col > gridOpenStats.length - 1) {
+        if (row < 0 || row >= gridOpenStats.length || col < 0 || col >= gridOpenStats.length) {
             throw new IndexOutOfBoundsException();
         }
 
@@ -93,8 +91,7 @@ public class Percolation {
 
     // is the site (row, col) full?
     public boolean isFull(int row, int col) {
-        if (row < 0 || row > gridOpenStats.length - 1 ||
-            col < 0 || col > gridOpenStats.length - 1) {
+        if (row < 0 || row >= gridOpenStats.length || col < 0 || col >= gridOpenStats.length) {
             throw new IndexOutOfBoundsException();
         }
 
